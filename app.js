@@ -7,11 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const secret_key = process.env.JWT_SECRET;
-const mongoose = require('mongoose');
-
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+require('./models/db');   
 
 
 app.set("view engine", "ejs");
