@@ -1,3 +1,4 @@
+const mongoose = require ('mongoose');
 require('./db');
 
 const userSchema = mongoose.Schema({
