@@ -62,7 +62,7 @@
     <% posts.forEach(post=> { %>
         <div class="mt-5 flex justify-center m-5">
             <div class="card bg-base-100 shadow-sm">
-                <div class="card-body" >
+                <div class="card-body">
                     <h2 class="card-title text-blue-500">
                         @<%= post.user.username %>
                     </h2>
@@ -75,13 +75,21 @@
                         <small class="text-gray-500">
                             <%= post.likes.length %> likes
                         </small>
-                        <div class="flex gap-4">
-                            <a class="text-blue-500" href="/like/<%= post._id %>">
-                                <%= (post.likes.indexOf(post.user._id)===-1) ? "Like" : "Unlike" %>
-                            </a>
-                            <a class="text-gray-500" href="/edit/<%= post._id %>">Edit</a>
-                            <a class="text-red-500" href="/delete/<%= post._id %>">Delete</a>
-                        </div>
+                        <% const isOwner=post.user._id.toString()===user._id.toString(); %>
+
+                            <div class="flex gap-4">
+                                <a class="text-blue-500" href="/like/<%= post._id %>">
+                                    <% const liked=post.likes.some( id=> id.toString() === user._id.toString()); %>
+
+                                        <%= liked ? "Unlike" : "Like" %>
+                                </a>
+
+                                <% if (isOwner) { %>
+                                    <a class="text-gray-500" href="/edit/<%= post._id %>">Edit</a>
+                                    <a class="text-red-500" href="/delete/<%= post._id %>">Delete</a>
+                                    <% } %>
+                            </div>
+                            
                     </div>
                 </div>
             </div>
