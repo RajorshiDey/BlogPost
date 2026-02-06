@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogPost</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        .card {
+            min-width: 80%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- -----------------------------------------------------------NAVBAR----------------------------------------------------------------------------------------- -->
+    <div class="navbar bg-base-100 shadow-sm">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">BlogPost</a>
+        </div>
+        <div class="flex-none">
+            <div tabindex="0" role="button" class="btn">
+                <a href="/create">Create Post</a>
+            </div>
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img alt="Tailwind CSS Navbar component"
+                            src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80" />
+                    </div>
+                </div>
+                <ul tabindex="-1"
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+
+                    <li class="pointer-events-none cursor-default">
+                        <span class="font-semibold text-xl p-4">
+                            Hello, <%= user.username %>
+                        </span>
+                    </li>
+
+                    <li><a href="/myposts">My Posts</a></li>
+                    <li><a class="text-red-500" href="/logout">Logout</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
+    <!-- -----------------------------------------------------------CARDS FOR BLOG----------------------------------------------------------------------------------------- -->
+    <% posts.forEach(post=> { %>
+        <div class="mt-5 flex justify-center m-5">
+            <div class="card bg-base-100 shadow-sm">
+                <div class="card-body" >
+                    <h2 class="card-title text-blue-500">
+                        @<%= post.user.username %>
+                    </h2>
+
+                    <p>
+                        <%= post.content %>
+                    </p>
+
+                    <div class="card-actions flex justify-between items-center w-full">
+                        <small class="text-gray-500">
+                            <%= post.likes.length %> likes
+                        </small>
+                        <div class="flex gap-4">
+                            <a class="text-blue-500" href="/like/<%= post._id %>">
+                                <%= (post.likes.indexOf(post.user._id)===-1) ? "Like" : "Unlike" %>
+                            </a>
+                            <a class="text-gray-500" href="/edit/<%= post._id %>">Edit</a>
+                            <a class="text-red-500" href="/delete/<%= post._id %>">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+            <!-- ----------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+</body>
+
+</html>
