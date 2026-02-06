@@ -1,4 +1,4 @@
-require('./models/db');
+require('db');
 
 const userSchema = mongoose.Schema({
     username: String,
