@@ -57,31 +57,55 @@ app.get('/create', isLoggedIn, async (req, res) => {
     res.render("create");
 });
 
-app.get('/like/:id', isLoggedIn ,async (req, res) => {
-    let post = await postModel.findOne({_id: req.params.id}).populate('user');
-    if (post.likes.indexOf(req.user.userid) === -1){
-        post.likes.push(req.user.userid);
-    }
-    else{
-        post.likes.splice(post.likes.indexOf(req.user.userid), 1);
-    }
-    await post.save();
-    // console.log(post);
-    res.redirect('/home');   
-})
+app.get('/like/:id', isLoggedIn, async (req, res) => {
+    const post = await postModel.findById(req.params.id);
 
-app.get('/likemy/:id', isLoggedIn ,async (req, res) => {
-    let post = await postModel.findOne({_id: req.params.id}).populate('user');
-    if (post.likes.indexOf(req.user.userid) === -1){
-        post.likes.push(req.user.userid);
+    if (!post) return res.redirect('/home');
+
+    const userId = req.user.userid;
+
+    const alreadyLiked = post.likes.some(
+        id => id.toString() === userId
+    );
+
+    if (alreadyLiked) {
+        // unlike
+        post.likes = post.likes.filter(
+            id => id.toString() !== userId
+        );
+    } else {
+        // like
+        post.likes.push(userId);
     }
-    else{
-        post.likes.splice(post.likes.indexOf(req.user.userid), 1);
-    }
+
     await post.save();
-    // console.log(post);
-    res.redirect('/myposts');   
-})
+    res.redirect('/home');
+});
+
+
+app.get('/likemy/:id', isLoggedIn, async (req, res) => {
+    const post = await postModel.findById(req.params.id);
+
+    if (!post) return res.redirect('/myposts');
+
+    const userId = req.user.userid;
+
+    const alreadyLiked = post.likes.some(
+        id => id.toString() === userId
+    );
+
+    if (alreadyLiked) {
+        post.likes = post.likes.filter(
+            id => id.toString() !== userId
+        );
+    } else {
+        post.likes.push(userId);
+    }
+
+    await post.save();
+    res.redirect('/myposts');
+});
+
 
 app.get('/edit/:id', isLoggedIn ,async (req, res) => {
     let post = await postModel.findOne({_id: req.params.id}).populate('user');
